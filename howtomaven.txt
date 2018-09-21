@@ -1,0 +1,23 @@
+Pasos para usar lanzar un  proyecto maven
+
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+Esto genera la estructura de directorios y el pom.xml
+--------------------------------------------
+
+Añadir al pom las dependencias y el arquetipo padre si es que lo tiene
+
+mvn install 
+
+para instalar las dependencias
+
+mvn package para compilar el proyecto en el directorio target
+enjoy!!
+
+An interesting thing to note is that phases and goals may be executed in sequence.
+
+mvn clean dependency:copy-dependencies package
+This command will clean the project, copy dependencies, and package the project (executing all phases up to package, of course).
+
+Generating the Site
+mvn site
