@@ -1,2 +1,5 @@
 target/
 .idea/
+/.metadata/
+/.settings
+.project
