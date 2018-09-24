@@ -10,30 +10,92 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fenix15100.app.resource.schools.School;
+
+
+import io.crnk.core.resource.annotations.JsonApiId;
+import io.crnk.core.resource.annotations.JsonApiLinksInformation;
+import io.crnk.core.resource.annotations.JsonApiMetaInformation;
+import io.crnk.core.resource.annotations.JsonApiRelation;
+import io.crnk.core.resource.annotations.JsonApiRelationId;
+import io.crnk.core.resource.annotations.JsonApiResource;
+import io.crnk.core.resource.annotations.LookupIncludeBehavior;
+import io.crnk.core.resource.annotations.RelationshipRepositoryBehavior;
+import io.crnk.core.resource.annotations.SerializeType;
+import io.crnk.core.resource.links.LinksInformation;
+import io.crnk.core.resource.meta.MetaInformation;
 
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name="Courses")
+@JsonApiResource(type = "course", resourcePath = "courses")
 public class Course implements Serializable {
-	
+	@JsonApiId
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id_course")
 	private Integer id;
 	
+	@JsonProperty
 	private String name;
 	
+	@JsonProperty
 	private int grade;
+	
+	@JsonApiRelationId
+	@Transient
+	private Integer schoolId;
 	
 	@ManyToOne
 	@JoinColumn(name="id_school", referencedColumnName="id_school",nullable=false)
+	
+	
+
+	@JsonApiRelation(opposite = "courses", lookUp = LookupIncludeBehavior.AUTOMATICALLY_WHEN_NULL,
+			repositoryBehavior = RelationshipRepositoryBehavior.FORWARD_OWNER,
+			serialize = SerializeType.ONLY_ID)
 	private School school;
 	
 	// TODO implement Asignaturas, Alumnos ,Profesores (ManytoMany)
 
+	@Transient
+	@JsonApiMetaInformation
+	private CourseMeta meta;
+
+	public static class CourseMeta implements MetaInformation {
+
+		private String value;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+	}
+	@Transient
+	@JsonApiLinksInformation
+	private CourseLinks links;
+
+	public static class CourseLinks implements LinksInformation {
+
+		private String value;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+	}
+	
+	
 	public Course() {
 	}
 
@@ -84,8 +146,20 @@ public class Course implements Serializable {
 	}
 
 	public void setSchool(School school) {
-		this.school = school;
+		this.schoolId = school != null ? school.getId() : null;
+	    this.school = school;
 	}
+
+	public Integer getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(Integer id_school) {
+		this.schoolId = id_school;
+	    this.school = null;
+	}
+
+	
 	
 	
 	
