@@ -7,7 +7,6 @@ import com.yahoo.elide.audit.Slf4jLogger;
 import com.yahoo.elide.core.DataStore;
 import com.yahoo.elide.datastores.hibernate5.HibernateStore;
 import org.hibernate.SessionFactory;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ import java.util.Map;
  */
 @RestController
 public class JsonApiController {
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(JsonApiController.class);
     @Autowired
     private EntityManagerFactory emf;
     /**
